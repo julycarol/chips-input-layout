@@ -1,4 +1,5 @@
 package com.tylersuehr.chips;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 
 import java.util.List;
@@ -23,13 +25,13 @@ import java.util.regex.Pattern;
 
 /**
  * Copyright © 2017 Tyler Suehr
- *
+ * <p>
  * Chips are a design concept specified in the Google Material Design Guide.
- *
+ * <p>
  * The purpose of this view, and this library, is for displaying chips in a flowing
  * layout, and allowing the user to input to filter any filterable chips or to create
  * custom chips.
- *
+ * <p>
  * Notes: by default, the chip data source is {@link ListChipDataSource}.
  *
  * @author Tyler Suehr
@@ -104,7 +106,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /**
      * Sets and stores a list of chips that are filterable and updates the
      * UI to enable the filterable RecyclerView accordingly.
-     *
+     * <p>
      * Note: this should only be called if you want the user to be able to
      * filter pre-existing (filterable chip list) chips.
      *
@@ -198,9 +200,9 @@ public class ChipsInputLayout extends MaxHeightScrollView
 
     /**
      * Gets all the currently filtered chips.
-     * @see #getOriginalFilterableChips() if you want the original list of chips
      *
      * @return List of {@link Chip}
+     * @see #getOriginalFilterableChips() if you want the original list of chips
      */
     public List<? extends Chip> getFilteredChips() {
         return mDataSource.getFilteredChips();
@@ -243,7 +245,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /**
      * Gets a selected chip with exactly the given title or like the given title.
      *
-     * @param title Title to search for
+     * @param title        Title to search for
      * @param exactlyEqual True if chip title should exactly match title
      * @return {@link Chip}
      */
@@ -260,13 +262,15 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /**
      * Gets a selected chip with exactly the given subtitle or like the given subtitle.
      *
-     * @param subtitle Subtitle to search for
+     * @param subtitle     Subtitle to search for
      * @param exactlyEqual True if chip subtitle should exactly match subtitle
      * @return {@link Chip}
      */
     public Chip getSelectedChipBySubtitle(String subtitle, boolean exactlyEqual) {
         for (Chip chip : mDataSource.getSelectedChips()) {
-            if (chip.getSubtitle() == null) { continue; }
+            if (chip.getSubtitle() == null) {
+                continue;
+            }
             if ((exactlyEqual && chip.getSubtitle().equals(subtitle)) ||
                     (!exactlyEqual && chip.getSubtitle().toLowerCase().contains(subtitle.toLowerCase()))) {
                 return chip;
@@ -303,7 +307,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /**
      * Gets a filtered chip with exactly the given title or like the given title.
      *
-     * @param title Title to search for
+     * @param title        Title to search for
      * @param exactlyEqual True if filtered chip title should exactly match title
      * @return {@link Chip}
      */
@@ -320,13 +324,15 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /**
      * Gets a filtered chip with exactly the given subtitle or like the given subtitle.
      *
-     * @param subtitle Subtitle to search for
+     * @param subtitle     Subtitle to search for
      * @param exactlyEqual True if filtered chip subtitle should exactly match subtitle
      * @return {@link Chip}
      */
     public Chip getFilteredChipBySubtitle(String subtitle, boolean exactlyEqual) {
         for (Chip chip : mDataSource.getFilteredChips()) {
-            if (chip.getSubtitle() == null) { continue; }
+            if (chip.getSubtitle() == null) {
+                continue;
+            }
             if ((exactlyEqual && chip.getSubtitle().equals(subtitle)) ||
                     (!exactlyEqual && chip.getSubtitle().toLowerCase().contains(subtitle.toLowerCase()))) {
                 return chip;
@@ -372,7 +378,12 @@ public class ChipsInputLayout extends MaxHeightScrollView
      * @return True if chip is valid, or no chip mValidator is set
      */
     public boolean validateChip(Chip chip) {
-        return mValidator == null || mValidator.validate(chip);
+        boolean isValid = mValidator == null || mValidator.validate(chip);
+        if (!isValid) {
+            chip.setError(true);
+            mChipsAdapter.notifyDataSetChanged();
+        }
+        return isValid;
     }
 
     /**
@@ -384,6 +395,8 @@ public class ChipsInputLayout extends MaxHeightScrollView
         if (mValidator != null) {
             for (Chip chip : mDataSource.getSelectedChips()) {
                 if (!mValidator.validate(chip)) {
+                    chip.setError(true);
+                    mChipsAdapter.notifyDataSetChanged();
                     return false;
                 }
             }
@@ -420,7 +433,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
 
     /**
      * Adds an observer to watch for any change events on the chip data source.
-     *
+     * <p>
      * Note: please use this conservatively!
      *
      * @param observer {@link ChipDataSource.ChangeObserver}
@@ -441,7 +454,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     /**
      * Changes the chip data source being used to manipulate chips, which will
      * update the UI accordingly.
-     *
+     * <p>
      * Note: will retain existing observers from old data source, but all chips
      * in the old data source will be cleared!
      *
@@ -455,6 +468,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
 
     /**
      * Gets an instance of {@link LetterTileProvider}.
+     *
      * @return {@link LetterTileProvider}
      */
     public LetterTileProvider getLetterTileProvider() {
@@ -580,12 +594,12 @@ public class ChipsInputLayout extends MaxHeightScrollView
         }
     }
 
-    public void setDelimiter(String delimiter, boolean regex){
+    public void setDelimiter(String delimiter, boolean regex) {
         mOptions.mDelimiter = delimiter;
         mOptions.mDelimiterRegex = regex;
     }
 
-    public void setDelimiter(String delimiter){
+    public void setDelimiter(String delimiter) {
         setDelimiter(delimiter, false);
     }
 
@@ -595,6 +609,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
 
     /**
      * Sets the image renderer used to load chip avatars.
+     *
      * @param renderer {@link ChipImageRenderer}
      */
     public void setImageRenderer(ChipImageRenderer renderer) {
@@ -627,7 +642,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
             // To show our filterable recycler view, we need to make sure
             // our ChipsInputLayout has already been displayed on the screen
             // so we can access its root view
-            ViewGroup rootView = (ViewGroup)getRootView();
+            ViewGroup rootView = (ViewGroup) getRootView();
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     Utils.getWindowWidth(getContext()),
                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -643,7 +658,7 @@ public class ChipsInputLayout extends MaxHeightScrollView
     }
 
     private void hideKeyboard() {
-        ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(mChipsInput.getWindowToken(), 0);
     }
 
@@ -676,7 +691,8 @@ public class ChipsInputLayout extends MaxHeightScrollView
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
 
         @Override
         public void afterTextChanged(final Editable s) {
@@ -696,12 +712,12 @@ public class ChipsInputLayout extends MaxHeightScrollView
             }
 
             String delimiter = mOptions.mDelimiter;
-            if(delimiter != null && delimiter.length() > 0 && mChipsInput.getKeyboardListener() != null){
+            if (delimiter != null && delimiter.length() > 0 && mChipsInput.getKeyboardListener() != null) {
                 String delimiterRegex = mOptions.mDelimiterRegex ? delimiter : Pattern.quote(delimiter);
                 final String text = s.toString();
-                if(Pattern.compile(delimiterRegex).matcher(text).find()){
+                if (Pattern.compile(delimiterRegex).matcher(text).find()) {
                     final String[] pieces = text.split(delimiterRegex);
-                    for(String piece : pieces) {
+                    for (String piece : pieces) {
                         mChipsInput.getKeyboardListener().onKeyboardActionDone(piece);
                     }
                 }

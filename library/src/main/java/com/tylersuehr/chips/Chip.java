@@ -11,7 +11,7 @@ import java.util.Locale;
 
 /**
  * Copyright © 2017 Tyler Suehr
- *
+ * <p>
  * This represents a chip (specified in Google Material Design Guide) as an object.
  *
  * @author Tyler Suehr
@@ -26,6 +26,8 @@ public abstract class Chip {
     private Object mTag;
     /* Specifies if this Chip can be filtered or not */
     private boolean mFilterable;
+
+    private boolean mHasError;
 
 
     @Nullable
@@ -45,6 +47,7 @@ public abstract class Chip {
 
     /**
      * Lazy loads a comparator to compare chips to each other.
+     *
      * @return {@link Comparator}
      */
     public static Comparator<Chip> getComparator() {
@@ -68,6 +71,14 @@ public abstract class Chip {
 
     public void setTag(Object tag) {
         this.mTag = tag;
+    }
+
+    public boolean hasError() {
+        return mHasError;
+    }
+
+    public void setError(boolean hasError) {
+        this.mHasError = hasError;
     }
 
     public void setFilterable(boolean value) {

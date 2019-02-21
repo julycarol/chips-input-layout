@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
+import com.tylersuehr.chips.Chip;
+import com.tylersuehr.chips.ChipDataSource;
 import com.tylersuehr.chips.ChipsInputLayout;
 
 import java.util.List;
@@ -31,6 +33,24 @@ public class MainActivity extends ContactLoadingActivity
         // Setup chips input
         mChipsInput = (ChipsInputLayout)findViewById(R.id.chips_input);
         mChipsInput.setImageRenderer(new GlideRenderer());
+        mChipsInput.setChipValidator(new ChipsInputLayout.ChipValidator() {
+            @Override
+            public boolean validate(Chip chip) {
+                return chip.getTitle().contains("t");
+            }
+        });
+
+        mChipsInput.addSelectionObserver(new ChipDataSource.SelectionObserver() {
+            @Override
+            public void onChipSelected(Chip addedChip) {
+                mChipsInput.validateChip(addedChip);
+            }
+
+            @Override
+            public void onChipDeselected(Chip removedChip) {
+
+            }
+        });
 
         // Load the current user's contact information
         loadContactsWithRuntimePermission();

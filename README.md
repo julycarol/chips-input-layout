@@ -18,7 +18,7 @@ allprojects {
 In your app level build.gradle:
 ```java
 dependencies {
-    compile 'com.github.tylersuehr7:chips-input-layout:2.3'
+    compile 'com.github.jcarol16:chips-input-layout:2.4'
 }  
 ```
 
@@ -69,7 +69,10 @@ Attribute | Type | Summary
 `app:chip_deleteIcon` | `reference` | Changes the chips' delete icons.
 `app:chip_deleteIconColor` | `color` | Color of each chips' delete icon.
 `app:chip_backgroundColor` | `color` | Color of each chips' background.
+`app:chip_backgroundDrawable` | `drawable` | Drawable of each chips' background.
+`app:chip_errorBackgroundDrawable` | `drawable` | Drawable of each chips' error background.
 `app:chip_textColor` | `color` | Text color of each chips' title and subtitle.
+`app:chip_errorTextColor` | `color` | Text color of each chips' title and subtitle.
 `app:details_deleteIconColor` | `color` | Color of each detailed chips' delete icon.
 `app:details_backgroundColor` | `color` | Color of each detailed chips' background.
 `app:details_textColor` | `color` | Text color of each detailed chips' title and subtitle.

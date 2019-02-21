@@ -1,4 +1,5 @@
 package com.tylersuehr.chips;
+
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -9,7 +10,7 @@ import android.util.AttributeSet;
 
 /**
  * Copyright © 2017 Tyler Suehr
- *
+ * <p>
  * Contains all the mutable properties for this library.
  *
  * @author Tyler Suehr
@@ -25,7 +26,10 @@ final class ChipOptions {
     Drawable mChipDeleteIcon;
     ColorStateList mChipDeleteIconColor;
     ColorStateList mChipBackgroundColor;
+    Drawable mChipBackgroundDrawable;
+    Drawable mChipErrorBackgroundDrawable;
     ColorStateList mChipTextColor;
+    ColorStateList mChipErrorTextColor;
     boolean mShowAvatar;
     boolean mShowDetails;
     boolean mShowDelete;
@@ -73,7 +77,10 @@ final class ChipOptions {
         mChipDeleteIcon = a.getDrawable(R.styleable.ChipsInputLayout_chip_deleteIcon);
         mChipDeleteIconColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_deleteIconColor);
         mChipBackgroundColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_backgroundColor);
+        mChipBackgroundDrawable = a.getDrawable(R.styleable.ChipsInputLayout_chip_backgroundDrawable);
+        mChipErrorBackgroundDrawable = a.getDrawable(R.styleable.ChipsInputLayout_chip_errorBackgroundDrawable);
         mChipTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_textColor);
+        mChipErrorTextColor = a.getColorStateList(R.styleable.ChipsInputLayout_chip_errorTextColor);
 
         // Setup the properties for the DetailedChipView
         mDetailsChipDeleteIconColor = a.getColorStateList(R.styleable.ChipsInputLayout_details_deleteIconColor);
@@ -95,7 +102,7 @@ final class ChipOptions {
         a.recycle();
 
         // Set the styleable attributes
-        final int[] styleable = new int[] { android.R.attr.textAppearance };
+        final int[] styleable = new int[]{android.R.attr.textAppearance};
         a = c.obtainStyledAttributes(attrs, styleable, defStyleAttr, 0);
         mTextAppearanceIdRes = a.getResourceId(0, android.R.attr.textAppearanceMedium);
         a.recycle();

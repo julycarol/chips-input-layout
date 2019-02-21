@@ -1,4 +1,5 @@
 package com.tylersuehr.chips;
+
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 
 /**
  * Copyright © 2017 Tyler Suehr
- *
+ * <p>
  * This view displays the normal chip (specified in Material Design Guide).
  *
  * @author Tyler Suehr
@@ -23,6 +24,7 @@ public class ChipView extends FrameLayout implements ChipComponent {
     private ImageButton mButtonDelete;
     private TextView mLabelView;
     private Chip mChip;
+    private ChipOptions mOptions;
 
 
     ChipView(@NonNull Context context) {
@@ -35,6 +37,7 @@ public class ChipView extends FrameLayout implements ChipComponent {
 
     @Override
     public void setChipOptions(ChipOptions options) {
+        mOptions = options;
         // Options will permit showing/hiding avatar
         if (!options.mShowAvatar) {
             // Hide the avatar image
@@ -43,8 +46,8 @@ public class ChipView extends FrameLayout implements ChipComponent {
             // Adjust left label margins according to the
             // Google Material Design Guide.
             ConstraintLayout.LayoutParams lp = (ConstraintLayout
-                    .LayoutParams)mLabelView.getLayoutParams();
-            lp.leftMargin = (int)(12f * getResources().getDisplayMetrics().density);
+                    .LayoutParams) mLabelView.getLayoutParams();
+            lp.leftMargin = (int) (12f * getResources().getDisplayMetrics().density);
         }
 
         // Options will permit showing/hiding delete button
@@ -55,8 +58,8 @@ public class ChipView extends FrameLayout implements ChipComponent {
             // Adjust right label margins according to the
             // Google Material Design Guide.
             ConstraintLayout.LayoutParams lp = (ConstraintLayout
-                    .LayoutParams)mLabelView.getLayoutParams();
-            lp.rightMargin = (int)(12f * getResources().getDisplayMetrics().density);
+                    .LayoutParams) mLabelView.getLayoutParams();
+            lp.rightMargin = (int) (12f * getResources().getDisplayMetrics().density);
         }
 
         // Set other options
@@ -65,6 +68,9 @@ public class ChipView extends FrameLayout implements ChipComponent {
         }
         if (options.mChipBackgroundColor != null) {
             setBackgroundColor(options.mChipBackgroundColor.getDefaultColor());
+        }
+        if (mOptions.mChipBackgroundDrawable != null) {
+            setBackground(mOptions.mChipBackgroundDrawable);
         }
         if (options.mChipDeleteIconColor != null) {
             mButtonDelete.setColorFilter(options.mChipDeleteIconColor
@@ -80,10 +86,21 @@ public class ChipView extends FrameLayout implements ChipComponent {
 
     /**
      * Displays the information stored in the given chip object.
+     *
      * @param chip {@link Chip}
      */
     public void inflateFromChip(Chip chip) {
         mChip = chip;
+
+        if (mChip.hasError()) {
+            if (mOptions.mChipErrorBackgroundDrawable != null) {
+                setBackground(mOptions.mChipErrorBackgroundDrawable);
+                if (mOptions.mChipErrorTextColor != null) {
+                    mLabelView.setTextColor(mOptions.mChipErrorTextColor);
+                }
+            }
+        }
+
         mLabelView.setText(mChip.getTitle());
 
         if (mImageRenderer == null) {
@@ -98,6 +115,7 @@ public class ChipView extends FrameLayout implements ChipComponent {
 
     /**
      * Sets an OnClickListener on the ChipView itself.
+     *
      * @param listener {@link OnChipClickListener}
      */
     public void setOnChipClicked(final OnChipClickListener listener) {
@@ -116,6 +134,7 @@ public class ChipView extends FrameLayout implements ChipComponent {
 
     /**
      * Sets an OnClickListener on the delete button.
+     *
      * @param listener {@link OnChipDeleteListener}
      */
     public void setOnDeleteClicked(final OnChipDeleteListener listener) {
