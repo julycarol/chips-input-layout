@@ -1,4 +1,5 @@
 package com.tylersuehr.chips;
+
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatEditText;
@@ -12,19 +13,20 @@ import android.widget.RelativeLayout;
 
 /**
  * Copyright © 2017 Tyler Suehr
- *
+ * <p>
  * Subclass of {@link AppCompatEditText} that provides a solution for detecting both
  * the IME_ACTION_DONE and backspace key press on software keyboards.
- *
+ * <p>
  * Setting onKeyEventListener doesn't work on software keyboards (IME) :(
- *
+ * <p>
  * TODO: Also try to simplify text watcher crap with this as well
  *
  * @author Tyler Suehr
  * @version 1.0
  */
-class ChipsEditText extends AppCompatEditText implements ChipComponent {
+public class ChipsEditText extends AppCompatEditText implements ChipComponent {
     private OnKeyboardListener mKeyboardListener;
+    private OnFocusListener mOnFocusListener;
 
 
     ChipsEditText(Context c) {
@@ -40,12 +42,12 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
 
         // Prevent fullscreen on landscape
         setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI
-                |EditorInfo.IME_ACTION_DONE);
+                | EditorInfo.IME_ACTION_DONE);
         setPrivateImeOptions("nm");
 
         // No suggestions
         setInputType(InputType.TYPE_TEXT_VARIATION_FILTER
-                |InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+                | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
     }
 
     /**
@@ -56,6 +58,11 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
         if (mKeyboardListener != null && actionCode == EditorInfo.IME_ACTION_DONE) {
             this.mKeyboardListener.onKeyboardActionDone(getText().toString());
         }
+
+        if (mOnFocusListener != null && (getText() != null && getText().length() > 0)) {
+            this.mOnFocusListener.insertText(getText().toString());
+        }
+
         super.onEditorAction(actionCode);
     }
 
@@ -91,21 +98,33 @@ class ChipsEditText extends AppCompatEditText implements ChipComponent {
         return mKeyboardListener;
     }
 
+    public void setOnFocusChangeListener(OnFocusListener listener) {
+        mOnFocusListener = listener;
+    }
+
+    OnFocusListener getOnFocusListener() {
+        return mOnFocusListener;
+    }
+
 
     /**
      * Callbacks for simplified keyboard action events.
      */
     interface OnKeyboardListener {
         void onKeyboardBackspace();
+
         void onKeyboardActionDone(String text);
     }
 
+    interface OnFocusListener {
+        void insertText(String text);
+    }
 
     /**
      * Since we cannot detect software keyboard backspace (KEYCODE_DEL) events using
      * onKeyEventListener, we will use this wrapper for {@link InputConnection} to do
      * so for software keyboards.
-     *
+     * <p>
      * In the latest Android version, deleteSurroundingText(1, 0), will be called for
      * backspace. So, we just emulate a backspace key press if that method is called
      * by manually calling {@link #sendKeyEvent(KeyEvent)}.

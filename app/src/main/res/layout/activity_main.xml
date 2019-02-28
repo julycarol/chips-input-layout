@@ -34,4 +34,9 @@
         android:layout_weight="1"
         android:padding="16dp"
         android:text="Above is the ChipsInputLayout! Type some stuff to filter contacts!" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:hint="test"
+        android:layout_height="wrap_content" />
 </LinearLayout>

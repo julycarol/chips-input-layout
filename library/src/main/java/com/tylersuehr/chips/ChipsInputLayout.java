@@ -722,6 +722,17 @@ public class ChipsInputLayout extends MaxHeightScrollView
                     }
                 }
             }
+
+            if (delimiter != null && delimiter.length() > 0 && mChipsInput.getOnFocusListener() != null) {
+                String delimiterRegex = mOptions.mDelimiterRegex ? delimiter : Pattern.quote(delimiter);
+                final String text = s.toString();
+                if (Pattern.compile(delimiterRegex).matcher(text).find()) {
+                    final String[] pieces = text.split(delimiterRegex);
+                    for (String piece : pieces) {
+                        mChipsInput.getOnFocusListener().insertText(piece);
+                    }
+                }
+            }
         }
     }
 

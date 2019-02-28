@@ -3,6 +3,8 @@ package com.tylersuehr.chipexample;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
 
 import com.tylersuehr.chips.Chip;
 import com.tylersuehr.chips.ChipDataSource;
@@ -27,11 +29,11 @@ public class MainActivity extends ContactLoadingActivity
         setContentView(R.layout.activity_main);
 
         // Setup toolbar
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Setup chips input
-        mChipsInput = (ChipsInputLayout)findViewById(R.id.chips_input);
+        mChipsInput = (ChipsInputLayout) findViewById(R.id.chips_input);
         mChipsInput.setImageRenderer(new GlideRenderer());
         mChipsInput.setChipValidator(new ChipsInputLayout.ChipValidator() {
             @Override
@@ -44,6 +46,7 @@ public class MainActivity extends ContactLoadingActivity
             @Override
             public void onChipSelected(Chip addedChip) {
                 mChipsInput.validateChip(addedChip);
+
             }
 
             @Override
@@ -52,8 +55,23 @@ public class MainActivity extends ContactLoadingActivity
             }
         });
 
+        mChipsInput.getChipsInputEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                addChip();
+            }
+        });
+
+
         // Load the current user's contact information
         loadContactsWithRuntimePermission();
+
+    }
+
+    private void addChip() {
+        if (mChipsInput.getChipsInputEditText().getText() != null && mChipsInput.getChipsInputEditText().getText().length() > 0) {
+            Log.e("Print Current OnFocus", mChipsInput.getChipsInputEditText().getText().toString());
+        }
     }
 
     /**
@@ -66,8 +84,10 @@ public class MainActivity extends ContactLoadingActivity
     }
 
     @Override
-    protected void onContactsReset() {}
+    protected void onContactsReset() {
+    }
 
     @Override
-    public void onContactClicked(ContactChip chip) {}
+    public void onContactClicked(ContactChip chip) {
+    }
 }
