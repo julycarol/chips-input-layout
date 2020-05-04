@@ -382,6 +382,9 @@ public class ChipsInputLayout extends MaxHeightScrollView
         if (!isValid) {
             chip.setError(true);
             mChipsAdapter.notifyDataSetChanged();
+        }else{
+            chip.setError(false);
+            mChipsAdapter.notifyDataSetChanged();
         }
         return isValid;
     }

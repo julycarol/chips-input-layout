@@ -11,6 +11,8 @@ import com.tylersuehr.chips.ChipDataSource;
 import com.tylersuehr.chips.ChipsInputLayout;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Copyright © 2017 Tyler Suehr
@@ -38,7 +40,7 @@ public class MainActivity extends ContactLoadingActivity
         mChipsInput.setChipValidator(new ChipsInputLayout.ChipValidator() {
             @Override
             public boolean validate(Chip chip) {
-                return chip.getTitle().contains("t");
+                return validateEmail(chip.getTitle());
             }
         });
 
@@ -66,6 +68,21 @@ public class MainActivity extends ContactLoadingActivity
         // Load the current user's contact information
         loadContactsWithRuntimePermission();
 
+    }
+
+    private Boolean validateEmail(String email){
+        if (email.isEmpty()) return false;
+
+        String regExp = ("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$");
+
+        Pattern pattern = Pattern.compile(regExp, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     private void addChip() {

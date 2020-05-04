@@ -99,6 +99,16 @@ public class ChipView extends FrameLayout implements ChipComponent {
                     mLabelView.setTextColor(mOptions.mChipErrorTextColor);
                 }
             }
+        } else {
+            if (mOptions.mChipErrorBackgroundDrawable != null) {
+                setBackground(mOptions.mChipBackgroundDrawable);
+                if (mOptions.mChipErrorTextColor != null) {
+                    mLabelView.setText(mChip.getTitle());
+
+                    if (mOptions.mChipTextColor != null)
+                        mLabelView.setTextColor(mOptions.mChipTextColor);
+                }
+            }
         }
 
         mLabelView.setText(mChip.getTitle());

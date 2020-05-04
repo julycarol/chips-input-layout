@@ -25,8 +25,9 @@
         android:textColor="#212121"
         android:textColorHint="#757575"
         app:chip_backgroundDrawable="@drawable/bg_chip_view"
-        app:chip_errorBackgroundDrawable="@drawable/bg_chip_view_error"
-        app:chip_errorTextColor="@android:color/white" />
+        app:chip_errorBackgroundDrawable="@drawable/bg_chip_view"
+        app:chip_errorTextColor="@android:color/holo_red_dark"
+        app:chip_textColor="@android:color/black"/>
 
     <TextView
         android:layout_width="match_parent"
